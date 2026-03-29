@@ -11,41 +11,62 @@
       padding: 0;
     }
 
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
       color: #222;
-      padding: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
       max-width: 1200px;
-      margin: 0 auto;
+      height: 100%;
+      padding: 1.5rem 2rem 1rem;
+      gap: 0.75rem;
+    }
+
+    .page-header {
+      flex-shrink: 0;
     }
 
     h1 {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
-      margin-bottom: 6px;
+      margin-bottom: 2px;
     }
 
     .sub {
       font-size: 13px;
-      color: #666;
-      margin-bottom: 1.5rem;
+      color: #888;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e2e2e2;
+      border-radius: 8px;
+      padding: 1.1rem 1.4rem;
+    }
+
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
     }
 
     .intro {
-      background: #fff;
-      border: 1px solid #dde6f0;
-      border-left: 4px solid #4a90d9;
-      border-radius: 8px;
-      padding: 1.1rem 1.4rem;
-      margin-bottom: 1.75rem;
-    }
-
-    .intro h2 {
-      font-size: 14px;
-      font-weight: 700;
-      color: #1a4e8a;
-      margin-bottom: 8px;
+      margin-bottom: 0;
     }
 
     .intro p {
@@ -68,61 +89,136 @@
 
     .drop-row {
       background: #fff;
-      border: 2px dashed #ccc;
-      border-radius: 10px;
+      border: 1px dashed #d0d0d0;
+      border-radius: 8px;
       padding: 1rem 1.25rem;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       cursor: pointer;
       transition: background 0.15s, border-color 0.15s;
     }
 
     .drop-row:hover,
     .drop-row.over {
-      background: #f0f7ff;
-      border-color: #4a90d9;
+      background: #f7f9fc;
+      border-color: #aaa;
     }
 
     .drop-row input[type=file] {
       display: none;
     }
 
+    .dr-grid {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr);
+      column-gap: 12px;
+      align-items: start;
+    }
+
+    .dr-logo-col {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      pointer-events: none;
+      padding-top: 1px;
+    }
+
+    .dr-main-col {
+      min-width: 0;
+    }
+
     .dr-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      gap: 8px;
       pointer-events: none;
     }
 
     .dr-icon {
-      font-size: 22px;
       flex-shrink: 0;
+      width: 64px;
+      height: 64px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .dr-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .dr-icon.circle {
+      border-radius: 50%;
+      background: transparent;
+      border: 2px solid #cfd4dc;
+    }
+
+    .dr-icon.panelapp-logo {
+      background: #007C83;
+      color: #fff;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 1;
+      text-transform: none;
+      text-align: center;
+      padding: 0 6px;
     }
 
     .dr-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
-      min-width: 210px;
+      flex: 1;
+    }
+
+    .dr-hint {
+      font-size: 11px;
+      color: #bbb;
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+
+    .dr-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 3px;
+      padding-left: 0;
+      pointer-events: auto;
     }
 
     .dr-sub {
       font-size: 11px;
-      color: #888;
-      line-height: 1.5;
+      color: #999;
       flex: 1;
+    }
+
+    .dr-sub a {
+      color: inherit;
+      text-decoration: underline;
+      pointer-events: auto;
+    }
+
+    .dr-sub a:hover {
+      color: #666;
     }
 
     .dr-badges {
       display: flex;
-      gap: 5px;
-      flex-wrap: wrap;
+      gap: 4px;
       flex-shrink: 0;
     }
 
     .badge-pill {
       display: inline-block;
       font-size: 10px;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 20px;
       font-weight: 600;
       white-space: nowrap;
@@ -141,13 +237,6 @@
     .bgr {
       background: #D9D9D9;
       color: #444;
-    }
-
-    .dr-hint {
-      font-size: 11px;
-      color: #aaa;
-      flex-shrink: 0;
-      pointer-events: none;
     }
 
     .dr-files {
@@ -243,28 +332,82 @@
       border-color: #4a90d9;
     }
 
+    .two-col {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 1.25rem;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .col-left {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .drop-zones-wrap {
+      flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+      padding-right: 3px;
+    }
+
+    .col-actions {
+      flex-shrink: 0;
+      padding-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+    }
+
     button.build {
-      width: 100%;
-      padding: 12px;
-      font-size: 15px;
+      flex: 1;
+      padding: 10px 16px;
+      font-size: 13px;
       font-weight: 700;
       background: #1a4e8a;
       color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 7px;
       cursor: pointer;
-      margin-top: 4px;
-      margin-bottom: 8px;
     }
 
     button.build:hover {
       background: #153e70;
     }
 
-    #gstatus {
+    .btn-export {
+      flex: 1;
+      padding: 10px 16px;
       font-size: 13px;
-      min-height: 20px;
-      margin-bottom: 1rem;
+      font-weight: 700;
+      background: #1a6b3c;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    .btn-export:hover:not(:disabled) {
+      background: #145730;
+    }
+
+    .btn-export:disabled {
+      background: #c8c8c8;
+      color: #888;
+      cursor: not-allowed;
+    }
+
+    #gstatus {
+      font-size: 12px;
+      min-height: 16px;
+      color: #888;
     }
 
     #gstatus.ok {
@@ -275,116 +418,197 @@
       color: #a94442;
     }
 
-    .action-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .btn-export {
-      padding: 11px 28px;
-      font-size: 14px;
-      font-weight: 700;
-      background: #1a6b3c;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .btn-export:hover {
-      background: #145730;
-    }
-
-    .btn-export:disabled {
-      background: #aaa;
-      cursor: not-allowed;
-    }
-
     .export-status {
-      font-size: 13px;
+      font-size: 12px;
+      color: #888;
     }
+
+    .col-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    .forklaring {
+      overflow: hidden;
+    }
+
+    .forklaring-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 10px 14px;
+      border-bottom: 1px solid #e2e2e2;
+    }
+
+    .forkl-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .forkl-table th {
+      background: #f0f0f0;
+      color: #222;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 7px 12px;
+      text-align: left;
+    }
+
+    .forkl-table td {
+      padding: 6px 12px;
+      border-bottom: 1px solid #f0f0f0;
+      vertical-align: middle;
+    }
+
+    .forkl-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .forkl-table td:first-child {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .fk-behold td { color: #999; }
+    .fk-hamed  td:first-child { background: #C6EFCE; color: #276221; }
+    .fk-fjern  td:first-child { background: #FFD7D7; color: #8B0000; }
+    .fk-alias  td:first-child { background: #BDD7EE; color: #1F5C8B; }
+    .fk-gena   td:first-child { background: #2E75B6; color: #fff; }
+    .fk-vurder td:first-child { background: #D9D9D9; color: #444; }
 
   </style>
 </head>
 
 <body>
+<div class="app">
 
-  <h1>Genbase-sammenslåer</h1>
-  <p class="sub">Slå sammen genlister fra flere databaser og eksporter en fargekodet masterlist til Excel.</p>
-
-  <div class="intro">
-    <h2>Slik bruker du verktøyet</h2>
-    <p>Dette verktøyet hjelper deg å samle genlister fra flere databaser i én felles oversikt. Hvert gen får en
-      masterstatus basert på hvilke databaser det finnes i.</p>
-    <ol>
-      <li><strong>Last opp filer</strong> – dra og slipp filer fra databasene nedenfor inn i riktig boks. Du kan laste
-        opp flere filer per kilde.</li>
-      <li><strong>Sett navn og versjon</strong> – gi hvert datasett et gjenkjennelig navn og versjonsnummer (f.eks.
-        «Pediatriske lidelser» og «v72.1»).</li>
-      <li><strong>Bygg mastertabell</strong> – klikk knappen for å slå sammen alle kildene til én tabell, sortert
-        alfabetisk.</li>
-      <li><strong>Eksporter til Excel</strong> – last ned en fargekodet Excel-fil der fargene oppdateres automatisk når
-        du endrer verdier i dropdownene.</li>
-    </ol>
-    <p style="margin-top:8px;font-size:12px;color:#888;">Støttede filformater: TSV, CSV og TXT.</p>
+  <div class="page-header">
+    <h1>Genbase-sammenslåer</h1>
+    <p class="sub">Slå sammen genlister fra flere databaser og eksporter en fargekodet masterlist til Excel.</p>
   </div>
 
-  <div class="drop-row" id="da-ngs" onclick="triggerPick('ngs')">
-    <input type="file" id="fi-ngs" multiple accept=".tsv,.csv,.txt" onchange="handleFiles(this.files,'ngs')">
-    <div class="dr-header">
-      <span class="dr-icon">🇳🇴</span>
-      <span class="dr-title">Genetikkportalen (NGS)</span>
-      <span class="dr-sub">genetikkportalen.no — alle gener merkes grønne</span>
-      <div class="dr-badges"><span class="badge-pill bg">alle gener → grønn</span></div>
-      <span class="dr-hint">klikk eller dra filer hit</span>
-    </div>
-    <div class="dr-files" id="files-ngs"></div>
-  </div>
+  <div class="two-col">
+    <div class="col-left">
+      <div class="drop-zones-wrap">
+        <div class="drop-row" id="da-ngs" onclick="triggerPick('ngs')">
+          <input type="file" id="fi-ngs" multiple accept=".tsv,.csv,.txt" onchange="handleFiles(this.files,'ngs')">
+          <div class="dr-grid">
+            <div class="dr-logo-col">
+              <span class="dr-icon"><img src="https://www.genetikkportalen.no/assets/logo-genetikk.PNG" alt="Genetikkportalen logo"></span>
+            </div>
+            <div class="dr-main-col">
+              <div class="dr-header">
+                <span class="dr-title">Genetikkportalen (NGS)</span>
+                <span class="dr-hint">klikk eller dra filer hit</span>
+              </div>
+              <div class="dr-meta">
+                <span class="dr-sub"><a href="https://genetikkportalen.no" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">genetikkportalen.no</a></span>
+                <div class="dr-badges"><span class="badge-pill bg">alle gener → grønn</span></div>
+              </div>
+              <div class="dr-files" id="files-ngs"></div>
+            </div>
+          </div>
+        </div>
 
-  <div class="drop-row" id="da-panelapp" onclick="triggerPick('panelapp')">
-    <input type="file" id="fi-panelapp" multiple accept=".tsv,.csv,.txt" onchange="handleFiles(this.files,'panelapp')">
-    <div class="dr-header">
-      <span class="dr-icon">🧬</span>
-      <span class="dr-title">PanelApp</span>
-      <span class="dr-sub">genomicsengland.co.uk — GEL_Status-kolonne (kun 3 og 2 inkluderes)</span>
-      <div class="dr-badges">
-        <span class="badge-pill bg">3 → grønn</span>
-        <span class="badge-pill by">2 → gul</span>
+        <div class="drop-row" id="da-panelapp" onclick="triggerPick('panelapp')">
+          <input type="file" id="fi-panelapp" multiple accept=".tsv,.csv,.txt" onchange="handleFiles(this.files,'panelapp')">
+          <div class="dr-grid">
+            <div class="dr-logo-col">
+              <span class="dr-icon circle panelapp-logo" aria-label="PanelApp logo">PanelApp</span>
+            </div>
+            <div class="dr-main-col">
+              <div class="dr-header">
+                <span class="dr-title">PanelApp</span>
+                <span class="dr-hint">klikk eller dra filer hit</span>
+              </div>
+              <div class="dr-meta">
+                <span class="dr-sub"><a href="https://panelapp.genomicsengland.co.uk" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">genomicsengland.co.uk</a></span>
+                <div class="dr-badges">
+                  <span class="badge-pill bg">3 → grønn</span>
+                  <span class="badge-pill by">2 → gul</span>
+                </div>
+              </div>
+              <div class="dr-files" id="files-panelapp"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="drop-row" id="da-g2p" onclick="triggerPick('g2p')">
+          <input type="file" id="fi-g2p" multiple accept=".tsv,.csv,.txt" onchange="handleFiles(this.files,'g2p')">
+          <div class="dr-grid">
+            <div class="dr-logo-col">
+              <span class="dr-icon"><img src="https://www.ebi.ac.uk/gene2phenotype/assets/G2P-logo-CaHhy9to.png" alt="Gene2Phenotype logo"></span>
+            </div>
+            <div class="dr-main-col">
+              <div class="dr-header">
+                <span class="dr-title">Gene2Phenotype (G2P)</span>
+                <span class="dr-hint">klikk eller dra filer hit</span>
+              </div>
+              <div class="dr-meta">
+                <span class="dr-sub"><a href="https://www.ebi.ac.uk/gene2phenotype" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">ebi.ac.uk/gene2phenotype</a></span>
+                <div class="dr-badges">
+                  <span class="badge-pill bg">definitive / strong → grønn</span>
+                  <span class="badge-pill by">moderate → gul</span>
+                </div>
+              </div>
+              <div class="dr-files" id="files-g2p"></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <span class="dr-hint">klikk eller dra filer hit</span>
-    </div>
-    <div class="dr-files" id="files-panelapp"></div>
-  </div>
 
-  <div class="drop-row" id="da-g2p" onclick="triggerPick('g2p')">
-    <input type="file" id="fi-g2p" multiple accept=".tsv,.csv,.txt" onchange="handleFiles(this.files,'g2p')">
-    <div class="dr-header">
-      <span class="dr-icon">🔬</span>
-      <span class="dr-title">Gene2Phenotype (G2P)</span>
-      <span class="dr-sub">ebi.ac.uk/gene2phenotype — confidence category-kolonne</span>
-      <div class="dr-badges">
-        <span class="badge-pill bg">definitive / strong → grønn</span>
-        <span class="badge-pill by">moderate → gul</span>
-        <span class="badge-pill bgr">limited → ekskludert</span>
+      <div class="col-actions">
+        <div class="btn-row">
+          <button class="build" onclick="buildTable()">Bygg mastertabell</button>
+          <button class="btn-export" id="btn-export" onclick="exportExcel()" disabled>Eksporter til Excel</button>
+        </div>
+        <div id="gstatus"></div>
+        <span class="export-status" id="export-status"></span>
       </div>
-      <span class="dr-hint">klikk eller dra filer hit</span>
     </div>
-    <div class="dr-files" id="files-g2p"></div>
+
+    <div class="col-right">
+      <div class="intro card">
+        <div class="card-title">Slik bruker du verktøyet</div>
+        <p>Dette verktøyet hjelper deg å samle genlister fra flere databaser i én felles oversikt. Hvert gen får en
+          masterstatus basert på hvilke databaser det finnes i.</p>
+        <ol>
+          <li><strong>Last opp filer</strong> – dra og slipp filer fra databasene nedenfor inn i riktig boks. Du kan laste
+            opp flere filer per kilde.</li>
+          <li><strong>Sett navn og versjon</strong> – gi hvert datasett et gjenkjennelig navn og versjonsnummer (f.eks.
+            «Pediatriske lidelser» og «v72.1»).</li>
+          <li><strong>Bygg mastertabell</strong> – klikk knappen for å slå sammen alle kildene til én tabell, sortert
+            alfabetisk.</li>
+          <li><strong>Eksporter til Excel</strong> – last ned en fargekodet Excel-fil der fargene oppdateres automatisk når
+            du endrer verdier i dropdownene.</li>
+        </ol>
+        <p style="margin-top:8px;font-size:12px;color:#888;">Støttede filformater: TSV, CSV og TXT.</p>
+      </div>
+
+      <div class="forklaring card">
+        <div class="forklaring-title">Masterstatus – forklaring</div>
+        <table class="forkl-table">
+          <thead><tr><th>Handling</th><th>Status</th><th>Forklaring</th></tr></thead>
+          <tbody>
+            <tr class="fk-behold"><td>Behold</td><td>Alle norske + PanelApp</td><td>Alle norske paneler OG minst ett PanelApp-panel</td></tr>
+            <tr class="fk-hamed"><td>Ha med?</td><td>Flere norske + PanelApp</td><td>Mer enn ett, ikke alle, norske paneler OG minst ett PanelApp</td></tr>
+            <tr class="fk-fjern"><td>Fjern?</td><td>Ett norsk + PanelApp</td><td>Kun ÉTT norsk panel OG minst ett PanelApp-panel</td></tr>
+            <tr class="fk-alias"><td>Alias?</td><td>Kun PanelApp</td><td>Ingen norske paneler, men minst ett PanelApp-panel</td></tr>
+            <tr class="fk-gena"><td>Gen med alias?</td><td>Alle norske, ingen PanelApp</td><td>Alle norske paneler, men IKKE noe PanelApp-panel</td></tr>
+            <tr class="fk-vurder"><td>Vurder</td><td>Annet</td><td>Passer ikke i noen av kategoriene over</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <button class="build" onclick="buildTable()">Bygg mastertabell</button>
-  <div id="gstatus"></div>
-
-  <div id="results" style="display:none">
-    <div class="action-row">
-      <button class="btn-export" id="btn-export" onclick="exportExcel()">Eksporter til Excel</button>
-      <span class="export-status" id="export-status"></span>
-    </div>
-  </div>
-
+</div>
   <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
   <script>
     var sources = [];
@@ -519,7 +743,7 @@
         row._mk = mk; row._ord = ord;
         return row;
       });
-      document.getElementById('results').style.display = 'block';
+      document.getElementById('btn-export').disabled = false;
       setGS(sorted.length + ' unike gener fra ' + loaded.length + ' kilde(r).', 'ok');
     }
     function setGS(msg, type) { var el = document.getElementById('gstatus'); el.textContent = msg; el.className = type || ''; }
@@ -540,12 +764,12 @@
     }
 
     function buildXlsx(ord) {
-      // fonts: 0=normal 1=bold 2=bold-white 3=bold-red 4=bold-yellbrown 5=bold-dkgreen 6=bold-green 7=bold-blue 8=bold-darkblue 9=bold-gray 10=normal-gray(Behold) 11=normal-green 12=normal-yellbrown 13=normal-gray
+      // fonts: 0=normal 1=bold 2=bold-dark(header) 3=bold-red 4=bold-yellbrown 5=bold-dkgreen 6=bold-green 7=bold-blue 8=bold-darkblue 9=bold-gray 10=normal-gray(Behold) 11=normal-green 12=normal-yellbrown 13=normal-gray
       var fnt = function (bold, rgb) { return '<font>' + (bold ? '<b/>' : '') + '<sz val="11"/>' + (rgb ? '<color rgb="' + rgb + '"/>' : '') + '<name val="Arial"/></font>'; };
-      var fontsXml = [fnt(0), fnt(1), fnt(1, 'FFFFFFFF'), fnt(1, 'FF8B0000'), fnt(1, 'FF7D6608'), fnt(1, 'FF1A3D1A'), fnt(1, 'FF276221'), fnt(1, 'FF1F5C8B'), fnt(1, 'FF1F4E79'), fnt(1, 'FF444444'), fnt(0, 'FF999999'), fnt(0, 'FF276221'), fnt(0, 'FF7D6608'), fnt(0, 'FF444444')];
-      // fills: 0=none 1=gray125(req) 2=teal 3=pink 4=yel99 5=grnA8 6=grnC6 7=ltblue(BDD7EE) 8=midblue(9DC3E6) 9=grayD9 10=yelEB
+      var fontsXml = [fnt(0), fnt(1), fnt(1, 'FF222222'), fnt(1, 'FF8B0000'), fnt(1, 'FF7D6608'), fnt(1, 'FF1A3D1A'), fnt(1, 'FF276221'), fnt(1, 'FF1F5C8B'), fnt(1, 'FF1F4E79'), fnt(1, 'FF444444'), fnt(0, 'FF999999'), fnt(0, 'FF276221'), fnt(0, 'FF7D6608'), fnt(0, 'FF444444')];
+      // fills: 0=none 1=gray125(req) 2=ltgray(header) 3=pink 4=yel99 5=grnA8 6=grnC6 7=ltblue(BDD7EE) 8=midblue(9DC3E6) 9=grayD9 10=yelEB
       var sf = function (rgb) { return '<fill><patternFill patternType="solid"><fgColor rgb="' + rgb + '"/></patternFill></fill>'; };
-      var fillsXml = ['<fill><patternFill patternType="none"/></fill>', '<fill><patternFill patternType="gray125"/></fill>', sf('FF2F4F4F'), sf('FFFFD7D7'), sf('FFFFFF99'), sf('FFA8D5A2'), sf('FFC6EFCE'), sf('FFBDD7EE'), sf('FF9DC3E6'), sf('FFD9D9D9'), sf('FFFFEB9C')];
+      var fillsXml = ['<fill><patternFill patternType="none"/></fill>', '<fill><patternFill patternType="gray125"/></fill>', sf('FFF0F0F0'), sf('FFFFD7D7'), sf('FFFFFF99'), sf('FFA8D5A2'), sf('FFC6EFCE'), sf('FFBDD7EE'), sf('FF9DC3E6'), sf('FFD9D9D9'), sf('FFFFEB9C')];
       var bdr0 = '<border><left/><right/><top/><bottom/><diagonal/></border>';
       var bdr1 = '<border><left style="thin"><color rgb="FFCCCCCC"/></left><right style="thin"><color rgb="FFCCCCCC"/></right><top style="thin"><color rgb="FFCCCCCC"/></top><bottom style="thin"><color rgb="FFCCCCCC"/></bottom><diagonal/></border>';
       var xf = function (fi, li, bi, h, v, w) {
@@ -599,8 +823,8 @@
         + '</styleSheet>';
 
       // ── sheet1: Genmaster ─────────────────────────────────────────────
-      var totalCols = ord.length + 3, lastRow = mergedData.length + 1;
-      var hdrLabels = ['Masterstatus', 'Gen', 'Lenker til OMIM'].concat(ord.map(function (s) { return (s.name || s.file.name) + (s.version ? ' (' + s.version + ')' : ''); }));
+      var totalCols = ord.length + 4, lastRow = mergedData.length + 1;
+      var hdrLabels = ['Masterstatus', 'Gen', 'Lenker til OMIM', 'Lenker til HGMD'].concat(ord.map(function (s) { return (s.name || s.file.name) + (s.version ? ' (' + s.version + ')' : ''); }));
       var rowsXml = '<row r="1" ht="40" customHeight="1">';
       for (var ci = 1; ci <= totalCols; ci++)rowsXml += xlCell(colLetter(ci) + '1', XS.HEADER, hdrLabels[ci - 1], true);
       rowsXml += '</row>';
@@ -608,21 +832,25 @@
       var hyperlinkRels = '';
       mergedData.forEach(function (row, i) {
         var r = i + 2, m = MASTER[row._mk];
-        var hrid = 'rId' + r;
+        var omimRid = 'omimRId' + r;
+        var hgmdRid = 'hgmdRId' + r;
         rowsXml += '<row r="' + r + '" ht="18" customHeight="1">';
         rowsXml += xlCell(colLetter(1) + r, MK_STYLE[row._mk] || XS.MGRAY, m.actionLabel, true);
         rowsXml += xlCell(colLetter(2) + r, XS.GEN, row.gene, true);
         rowsXml += xlCell(colLetter(3) + r, XS.OLINK, 'OMIM', true);
-        ord.forEach(function (s, si) { var e = row[s.id]; rowsXml += e ? xlCell(colLetter(si + 4) + r, TAG_STYLE[e.tag] || XS.MGRAY, row.gene, true) : xlCell(colLetter(si + 4) + r, XS.EMPTY, null, false); });
+        rowsXml += xlCell(colLetter(4) + r, XS.OLINK, 'HGMD', true);
+        ord.forEach(function (s, si) { var e = row[s.id]; rowsXml += e ? xlCell(colLetter(si + 5) + r, TAG_STYLE[e.tag] || XS.MGRAY, row.gene, true) : xlCell(colLetter(si + 5) + r, XS.EMPTY, null, false); });
         rowsXml += '</row>';
-        hyperlinksXml += '<hyperlink ref="C' + r + '" r:id="' + hrid + '"/>';
-        hyperlinkRels += '<Relationship Id="' + hrid + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://www.omim.org/search?limit=10&amp;search=' + xmlEsc(row.gene) + '" TargetMode="External"/>';
+        hyperlinksXml += '<hyperlink ref="C' + r + '" r:id="' + omimRid + '"/><hyperlink ref="D' + r + '" r:id="' + hgmdRid + '"/>';
+        hyperlinkRels += '<Relationship Id="' + omimRid + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://www.omim.org/search?limit=10&amp;search=' + xmlEsc(row.gene) + '" TargetMode="External"/>';
+        hyperlinkRels += '<Relationship Id="' + hgmdRid + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://my.qiagendigitalinsights.com/bbp/view/hgmd/pro/gene.php?gene=' + xmlEsc(row.gene) + '" TargetMode="External"/>';
       });
       var colsXml = '<cols>'
         + '<col min="1" max="1" width="16" customWidth="1"/>'
         + '<col min="2" max="2" width="16" customWidth="1"/>'
         + '<col min="3" max="3" width="8" customWidth="1"/>'
-        + (ord.length ? '<col min="4" max="' + (3 + ord.length) + '" width="16" customWidth="1"/>' : '')
+        + '<col min="4" max="4" width="8" customWidth="1"/>'
+        + (ord.length ? '<col min="5" max="' + (4 + ord.length) + '" width="16" customWidth="1"/>' : '')
         + '</cols>';
       var cfRules = [
         { dxfId: 0, label: 'Behold' },
@@ -644,7 +872,7 @@
       var sheet1Xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         + '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
         + '<sheetViews><sheetView tabSelected="1" workbookViewId="0">'
-        + '<pane xSplit="3" ySplit="1" topLeftCell="D2" activePane="bottomRight" state="frozen"/>'
+        + '<pane xSplit="4" ySplit="1" topLeftCell="E2" activePane="bottomRight" state="frozen"/>'
         + '<selection pane="bottomRight"/>'
         + '</sheetView></sheetViews>'
         + '<sheetFormatPr defaultRowHeight="15"/>'
@@ -656,27 +884,24 @@
 
       // ── sheet2: Forklaring ────────────────────────────────────────────
       var leg = '<row r="1" ht="24" customHeight="1">' + xlCell('A1', XS.LEGHEAD, 'Handling', true) + xlCell('B1', XS.LEGHEAD, 'Status', true) + xlCell('C1', XS.LEGHEAD, 'Forklaring', true) + '</row>';
-      var legendRows = [
-        { action: 'Behold', style: MK_STYLE['dark-green'], status: MASTER['dark-green'].label, info: 'Alle norske paneler OG minst ett PanelApp-panel \u2192 Behold' },
-        { action: 'Vurder (behold)', style: MK_STYLE['green'], status: MASTER['green'].label, info: 'Mer enn ett, ikke alle, norske paneler OG minst ett PanelApp \u2192 Vurder (behold)' },
-        { action: 'Vurder (fjern)', style: XS.GYELLOW, status: MASTER['lightred'].label, info: 'Kun \u00c9TT norsk panel OG minst ett PanelApp-panel \u2192 Vurder (fjern)' },
-        { action: 'Fjern', style: XS.FJERN, status: 'Manuelt valg', info: 'Manuell status satt i dropdown \u2192 Fjern' },
-        { action: 'Alias?', style: MK_STYLE['lightblue'], status: MASTER['lightblue'].label, info: 'Ingen norske paneler, men minst ett PanelApp-panel \u2192 Alias?' },
-        { action: 'Gen med alias?', style: MK_STYLE['darkblue'], status: MASTER['darkblue'].label, info: 'Alle norske paneler, men IKKE noe PanelApp-panel \u2192 Gen med alias?' },
-        { action: 'Vurder', style: MK_STYLE['gray'], status: MASTER['gray'].label, info: 'Passer ikke i noen av kategoriene over \u2192 Vurder' }
-      ];
-      legendRows.forEach(function (p, i) {
-        var r = i + 2;
+      [['dark-green', 'Alle norske paneler OG minst ett PanelApp-panel'],
+       ['green',      'Mer enn ett, ikke alle, norske paneler OG minst ett PanelApp'],
+       ['lightred',   'Kun \u00c9TT norsk panel OG minst ett PanelApp-panel'],
+       ['lightblue',  'Ingen norske paneler, men minst ett PanelApp-panel'],
+       ['darkblue',   'Alle norske paneler, men IKKE noe PanelApp-panel'],
+       ['gray',       'Passer ikke i noen av kategoriene over']
+      ].forEach(function(p, i) {
+        var r = i + 2, m = MASTER[p[0]];
         leg += '<row r="' + r + '" ht="20" customHeight="1">'
-          + xlCell('A' + r, p.style, p.action, true)
-          + xlCell('B' + r, XS.LEGNORM, p.status, true)
-          + xlCell('C' + r, XS.LEGNORM, p.info, true)
+          + xlCell('A' + r, MK_STYLE[p[0]], m.actionLabel, true)
+          + xlCell('B' + r, XS.LEGNORM, m.label, true)
+          + xlCell('C' + r, XS.LEGNORM, p[1], true)
           + '</row>';
       });
-      var sourceHeaderRow = legendRows.length + 3;
-      leg += '<row r="' + (sourceHeaderRow - 1) + '"/><row r="' + sourceHeaderRow + '" ht="18" customHeight="1">' + xlCell('A' + sourceHeaderRow, XS.GEN, 'Datakilder lastet inn', true) + '</row>';
-      ord.forEach(function (s, si) {
-        var r = sourceHeaderRow + 1 + si;
+      var srcHead = 10;
+      leg += '<row r="9"/><row r="' + srcHead + '" ht="18" customHeight="1">' + xlCell('A' + srcHead, XS.GEN, 'Datakilder lastet inn', true) + '</row>';
+      ord.forEach(function(s, si) {
+        var r = srcHead + 1 + si;
         var t = s.tagMap === 'ngs' ? 'Genetikkportalen (NGS)' : s.tagMap === 'panelapp' ? 'PanelApp' : 'Gene2Phenotype (G2P)';
         leg += '<row r="' + r + '" ht="18" customHeight="1">' + xlCell('A' + r, XS.LEGNORM, (s.name || s.file.name) + (s.version ? ' (' + s.version + ')' : ''), true) + xlCell('B' + r, XS.LEGNORM, t, true) + '</row>';
       });
@@ -684,7 +909,7 @@
         + '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
         + '<sheetViews><sheetView workbookViewId="0"/></sheetViews>'
         + '<sheetFormatPr defaultRowHeight="15"/>'
-        + '<cols><col min="1" max="1" width="40" customWidth="1"/><col min="2" max="2" width="28" customWidth="1"/><col min="3" max="3" width="60" customWidth="1"/></cols>'
+        + '<cols><col min="1" max="1" width="18" customWidth="1"/><col min="2" max="2" width="28" customWidth="1"/><col min="3" max="3" width="60" customWidth="1"/></cols>'
         + '<sheetData>' + leg + '</sheetData>'
         + '</worksheet>';
 
