@@ -813,8 +813,8 @@
         + '</styleSheet>';
 
       // ── sheet1: Genmaster ─────────────────────────────────────────────
-      var totalCols = ord.length + 4, lastRow = mergedData.length + 1;
-      var hdrLabels = ['Masterstatus', 'Gen', 'Lenker til OMIM', 'Lenker til HGMD'].concat(ord.map(function (s) { return (s.name || s.file.name) + (s.version ? ' (' + s.version + ')' : ''); }));
+      var totalCols = ord.length + 5, lastRow = mergedData.length + 1;
+      var hdrLabels = ['Masterstatus', 'Gen', 'Lenker til OMIM', 'Lenker til HGMD', 'Lenker til PanelApp'].concat(ord.map(function (s) { return (s.name || s.file.name) + (s.version ? ' (' + s.version + ')' : ''); }));
       var rowsXml = '<row r="1" ht="40" customHeight="1">';
       for (var ci = 1; ci <= totalCols; ci++)rowsXml += xlCell(colLetter(ci) + '1', XS.HEADER, hdrLabels[ci - 1], true);
       rowsXml += '</row>';
@@ -824,23 +824,27 @@
         var r = i + 2, m = MASTER[row._mk];
         var omimRid = 'omimRId' + r;
         var hgmdRid = 'hgmdRId' + r;
+        var panelRid = 'panelRId' + r;
         rowsXml += '<row r="' + r + '" ht="18" customHeight="1">';
         rowsXml += xlCell(colLetter(1) + r, MK_STYLE[row._mk] || XS.MGRAY, m.actionLabel, true);
         rowsXml += xlCell(colLetter(2) + r, XS.GEN, row.gene, true);
         rowsXml += xlCell(colLetter(3) + r, XS.OLINK, 'OMIM', true);
         rowsXml += xlCell(colLetter(4) + r, XS.OLINK, 'HGMD', true);
-        ord.forEach(function (s, si) { var e = row[s.id]; rowsXml += e ? xlCell(colLetter(si + 5) + r, TAG_STYLE[e.tag] || XS.MGRAY, row.gene, true) : xlCell(colLetter(si + 5) + r, XS.EMPTY, null, false); });
+        rowsXml += xlCell(colLetter(5) + r, XS.OLINK, 'PanelApp', true);
+        ord.forEach(function (s, si) { var e = row[s.id]; rowsXml += e ? xlCell(colLetter(si + 6) + r, TAG_STYLE[e.tag] || XS.MGRAY, row.gene, true) : xlCell(colLetter(si + 6) + r, XS.EMPTY, null, false); });
         rowsXml += '</row>';
-        hyperlinksXml += '<hyperlink ref="C' + r + '" r:id="' + omimRid + '"/><hyperlink ref="D' + r + '" r:id="' + hgmdRid + '"/>';
+        hyperlinksXml += '<hyperlink ref="C' + r + '" r:id="' + omimRid + '"/><hyperlink ref="D' + r + '" r:id="' + hgmdRid + '"/><hyperlink ref="E' + r + '" r:id="' + panelRid + '"/>';
         hyperlinkRels += '<Relationship Id="' + omimRid + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://www.omim.org/search?limit=10&amp;search=' + xmlEsc(row.gene) + '" TargetMode="External"/>';
         hyperlinkRels += '<Relationship Id="' + hgmdRid + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://my.qiagendigitalinsights.com/bbp/view/hgmd/pro/gene.php?gene=' + xmlEsc(row.gene) + '" TargetMode="External"/>';
+        hyperlinkRels += '<Relationship Id="' + panelRid + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://panelapp.genomicsengland.co.uk/panels/entities/' + xmlEsc(row.gene) + '" TargetMode="External"/>';
       });
       var colsXml = '<cols>'
         + '<col min="1" max="1" width="16" customWidth="1"/>'
         + '<col min="2" max="2" width="16" customWidth="1"/>'
         + '<col min="3" max="3" width="8" customWidth="1"/>'
         + '<col min="4" max="4" width="8" customWidth="1"/>'
-        + (ord.length ? '<col min="5" max="' + (4 + ord.length) + '" width="16" customWidth="1"/>' : '')
+        + '<col min="5" max="5" width="10" customWidth="1"/>'
+        + (ord.length ? '<col min="6" max="' + (5 + ord.length) + '" width="16" customWidth="1"/>' : '')
         + '</cols>';
       var cfRules = [
         { dxfId: 0, label: 'Behold' },
@@ -862,7 +866,7 @@
       var sheet1Xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         + '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
         + '<sheetViews><sheetView tabSelected="1" workbookViewId="0">'
-        + '<pane xSplit="4" ySplit="1" topLeftCell="E2" activePane="bottomRight" state="frozen"/>'
+        + '<pane xSplit="5" ySplit="1" topLeftCell="F2" activePane="bottomRight" state="frozen"/>'
         + '<selection pane="bottomRight"/>'
         + '</sheetView></sheetViews>'
         + '<sheetFormatPr defaultRowHeight="15"/>'
