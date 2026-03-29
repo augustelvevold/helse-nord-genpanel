@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Genbase-sammenslåer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .sub {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    .intro {
+      background: #fff;
+      border: 1px solid #dde6f0;
+      border-left: 4px solid #4a90d9;
+      border-radius: 8px;
+      padding: 1.1rem 1.4rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .intro h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a4e8a;
+      margin-bottom: 8px;
+    }
+
+    .intro p {
+      font-size: 13px;
+      color: #444;
+      line-height: 1.7;
+      margin-bottom: 6px;
+    }
+
+    .intro p:last-child {
+      margin-bottom: 0;
+    }
+
+    .intro ol {
+      font-size: 13px;
+      color: #444;
+      line-height: 1.8;
+      padding-left: 1.2rem;
+    }
+
+    .drop-row {
+      background: #fff;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .drop-row:hover,
+    .drop-row.over {
+      background: #f0f7ff;
+      border-color: #4a90d9;
+    }
+
+    .drop-row input[type=file] {
+      display: none;
+    }
+
+    .dr-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      pointer-events: none;
+    }
+
+    .dr-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .dr-title {
+      font-size: 14px;
+      font-weight: 700;
+      min-width: 210px;
+    }
+
+    .dr-sub {
+      font-size: 11px;
+      color: #888;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .dr-badges {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .bg {
+      background: #C6EFCE;
+      color: #276221;
+    }
+
+    .by {
+      background: #FFEB9C;
+      color: #7D6608;
+    }
+
+    .bgr {
+      background: #D9D9D9;
+      color: #444;
+    }
+
+    .dr-hint {
+      font-size: 11px;
+      color: #aaa;
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+
+    .dr-files {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .file-chip {
+      background: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 7px 10px;
+    }
+
+    .file-chip.ok {
+      border-color: #5cb85c;
+    }
+
+    .file-chip.error {
+      border-color: #d9534f;
+    }
+
+    .chip-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .chip-filename {
+      font-size: 11px;
+      font-family: monospace;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #666;
+    }
+
+    .chip-count {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .chip-rm {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #bbb;
+      font-size: 16px;
+      padding: 0 2px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .chip-rm:hover {
+      color: #d9534f;
+    }
+
+    .chip-fields {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chip-field {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .chip-field label {
+      font-size: 10px;
+      color: #888;
+    }
+
+    .chip-field input {
+      font-size: 12px;
+      padding: 4px 7px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #fff;
+      width: 100%;
+    }
+
+    .chip-field input:focus {
+      outline: 2px solid #4a90d9;
+      border-color: #4a90d9;
+    }
+
+    button.build {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      background: #1a4e8a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+
+    button.build:hover {
+      background: #153e70;
+    }
+
+    #gstatus {
+      font-size: 13px;
+      min-height: 20px;
+      margin-bottom: 1rem;
+    }
+
+    #gstatus.ok {
+      color: #3c763d;
+    }
+
+    #gstatus.err {
+      color: #a94442;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-export {
+      padding: 11px 28px;
+      font-size: 14px;
+      font-weight: 700;
+      background: #1a6b3c;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn-export:hover {
+      background: #145730;
+    }
+
+    .btn-export:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .export-status {
+      font-size: 13px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <h1>Genbase-sammenslåer</h1>
+  <p class="sub">Slå sammen genlister fra flere databaser og eksporter en fargekodet masterlist til Excel.</p>
+
+  <div class="intro">
+    <h2>Slik bruker du verktøyet</h2>
+    <p>Dette verktøyet hjelper deg å samle genlister fra flere databaser i én felles oversikt. Hvert gen får en
+      masterstatus basert på hvilke databaser det finnes i.</p>
+    <ol>
+      <li><strong>Last opp filer</strong> – dra og slipp filer fra databasene nedenfor inn i riktig boks. Du kan laste
+        opp flere filer per kilde.</li>
+      <li><strong>Sett navn og versjon</strong> – gi hvert datasett et gjenkjennelig navn og versjonsnummer (f.eks.
+        «Pediatriske lidelser» og «v72.1»).</li>
+      <li><strong>Bygg mastertabell</strong> – klikk knappen for å slå sammen alle kildene til én tabell, sortert
+        alfabetisk.</li>
+      <li><strong>Eksporter til Excel</strong> – last ned en fargekodet Excel-fil der fargene oppdateres automatisk når
+        du endrer verdier i dropdownene.</li>
+    </ol>
+    <p style="margin-top:8px;font-size:12px;color:#888;">Støttede filformater: TSV, CSV og TXT.</p>
+  </div>
+
+  <div class="drop-row" id="da-ngs" onclick="triggerPick('ngs')">
+    <input type="file" id="fi-ngs" multiple accept=".tsv,.csv,.txt" onchange="handleFiles(this.files,'ngs')">
+    <div class="dr-header">
+      <span class="dr-icon">🇳🇴</span>
+      <span class="dr-title">Genetikkportalen (NGS)</span>
+      <span class="dr-sub">genetikkportalen.no — alle gener merkes grønne</span>
+      <div class="dr-badges"><span class="badge-pill bg">alle gener → grønn</span></div>
+      <span class="dr-hint">klikk eller dra filer hit</span>
+    </div>
+    <div class="dr-files" id="files-ngs"></div>
+  </div>
+
+  <div class="drop-row" id="da-panelapp" onclick="triggerPick('panelapp')">
+    <input type="file" id="fi-panelapp" multiple accept=".tsv,.csv,.txt" onchange="handleFiles(this.files,'panelapp')">
+    <div class="dr-header">
+      <span class="dr-icon">🧬</span>
+      <span class="dr-title">PanelApp</span>
+      <span class="dr-sub">genomicsengland.co.uk — GEL_Status-kolonne (kun 3 og 2 inkluderes)</span>
+      <div class="dr-badges">
+        <span class="badge-pill bg">3 → grønn</span>
+        <span class="badge-pill by">2 → gul</span>
+      </div>
+      <span class="dr-hint">klikk eller dra filer hit</span>
+    </div>
+    <div class="dr-files" id="files-panelapp"></div>
+  </div>
+
+  <div class="drop-row" id="da-g2p" onclick="triggerPick('g2p')">
+    <input type="file" id="fi-g2p" multiple accept=".tsv,.csv,.txt" onchange="handleFiles(this.files,'g2p')">
+    <div class="dr-header">
+      <span class="dr-icon">🔬</span>
+      <span class="dr-title">Gene2Phenotype (G2P)</span>
+      <span class="dr-sub">ebi.ac.uk/gene2phenotype — confidence category-kolonne</span>
+      <div class="dr-badges">
+        <span class="badge-pill bg">definitive / strong → grønn</span>
+        <span class="badge-pill by">moderate → gul</span>
+        <span class="badge-pill bgr">limited → ekskludert</span>
+      </div>
+      <span class="dr-hint">klikk eller dra filer hit</span>
+    </div>
+    <div class="dr-files" id="files-g2p"></div>
+  </div>
+
+  <button class="build" onclick="buildTable()">Bygg mastertabell</button>
+  <div id="gstatus"></div>
+
+  <div id="results" style="display:none">
+    <div class="action-row">
+      <button class="btn-export" id="btn-export" onclick="exportExcel()">Eksporter til Excel</button>
+      <span class="export-status" id="export-status"></span>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script>
+    var sources = [];
+    var mergedData = [];
+
+    // ── Drag and drop — identical to working version ──────────────────
+    ['ngs', 'panelapp', 'g2p'].forEach(function (type) {
+      var da = document.getElementById('da-' + type);
+      da.addEventListener('dragover', function (e) { e.preventDefault(); da.classList.add('over'); });
+      da.addEventListener('dragleave', function (e) { if (!da.contains(e.relatedTarget)) da.classList.remove('over'); });
+      da.addEventListener('drop', function (e) { e.preventDefault(); da.classList.remove('over'); handleFiles(e.dataTransfer.files, type); });
+    });
+
+    function triggerPick(type) { document.getElementById('fi-' + type).click(); }
+    function uid() { return Math.random().toString(36).slice(2, 8); }
+
+    function handleFiles(files, tagMap) {
+      Array.from(files).forEach(function (file) {
+        var id = uid();
+        var src = { id: id, file: file, name: guessName(file.name), version: guessVersion(file.name), tagMap: tagMap, genes: [], status: 'reading' };
+        sources.push(src);
+        renderChips();
+        readFile(file, function (text) { var p = parseFile(text, src); src.genes = p.genes; src.status = src.genes.length > 0 ? 'ok' : 'error'; renderChips(); });
+      });
+    }
+
+    function guessVersion(fn) { var base = fn.replace(/\.[^.]+$/, ''); var pats = [/(\d{4}-\d{2}-\d{2})/, /(\d{4}_\d{2}_\d{2})/, /(\d{8})(?=\D|$)/, /v(\d+[\.\d]*)/i, /(20\d{2})/]; for (var i = 0; i < pats.length; i++) { var m = base.match(pats[i]); if (m) return m[0]; } return ''; }
+    function guessName(fn) { var base = fn.replace(/\.[^.]+$/, ''); var name = base.replace(/\d{4}-\d{2}-\d{2}|\d{8}|v\d+[\.\d]*/g, '').replace(/[_\-]+/g, ' ').replace(/\s+/g, ' ').trim(); return name.charAt(0).toUpperCase() + name.slice(1); }
+    function readFile(file, cb) { var r = new FileReader(); r.onload = function (e) { cb(e.target.result); }; r.readAsText(file); }
+    function detectSep(line) { var t = (line.match(/\t/g) || []).length, c = (line.match(/,/g) || []).length, s = (line.match(/;/g) || []).length; return t >= c && t >= s ? '\t' : c >= s ? ',' : ';'; }
+
+    var GCOLS = ['entity name', 'gene symbol', 'symbol', 'gene', 'approved symbol', 'hgnc symbol', 'gene name', 'hgnc_symbol', 'gene_symbol'];
+    var TCOLS = ['gel_status', 'confidence', 'confidence category', 'confidence_category', 'list', 'status', 'colour', 'color'];
+
+    function findCol(header, candidates) {
+      for (var i = 0; i < candidates.length; i++) { var c2 = candidates[i]; var idx = header.findIndex(function (h) { return h.toLowerCase().trim().replace(/['"]/g, '') === c2; }); if (idx >= 0) return idx; }
+      for (var i = 0; i < candidates.length; i++) { var c2 = candidates[i]; var idx = header.findIndex(function (h) { return h.toLowerCase().trim().replace(/['"]/g, '').includes(c2); }); if (idx >= 0) return idx; }
+      return -1;
+    }
+    function resolveTag(raw, src) {
+      var d = (raw || '').trim();
+      if (src.tagMap === 'panelapp') { var n = parseInt(d); if (n === 1) return { tag: null }; var t = n === 3 ? 'green' : n === 2 ? 'yellow' : null; return { tag: t }; }
+      if (src.tagMap === 'g2p') { var l = d.toLowerCase(); if (l.includes('limited')) return { tag: null }; var t = (l.includes('definitive') || l.includes('strong')) ? 'green' : l.includes('moderate') ? 'yellow' : null; return { tag: t }; }
+      return { tag: 'green' };
+    }
+    function parseFile(text, src) {
+      var lines = text.split('\n').filter(function (l) { return l.trim(); });
+      if (!lines.length) return { genes: [] };
+      var sep = detectSep(lines[0]);
+      var isMulti = lines[0].includes(sep) && lines[0].split(sep).length > 1;
+      if (!isMulti) { return { genes: lines.map(function (l) { return l.trim().toUpperCase(); }).filter(function (g) { return /^[A-Z][A-Z0-9\-\.]*$/.test(g); }).map(function (gene) { return { gene: gene, tag: 'green' }; }) } }
+      var hi = 0;
+      for (var i = 0; i < Math.min(10, lines.length); i++) { var cols = lines[i].split(sep).map(function (c) { return c.trim().replace(/^["']|["']$/g, '').toLowerCase(); }); if (cols.some(function (c) { return GCOLS.some(function (n) { return c.includes(n.split(' ')[0]); }) })) { hi = i; break; } }
+      var header = lines[hi].split(sep).map(function (c) { return c.trim().replace(/^["']|["']$/g, ''); });
+      var gi = findCol(header, GCOLS); if (gi < 0) gi = 0;
+      var ti = findCol(header, TCOLS);
+      var genes = [];
+      for (var i = hi + 1; i < lines.length; i++) {
+        var cols = lines[i].split(sep).map(function (c) { return c.trim().replace(/^["']|["']$/g, ''); });
+        var gene = (cols[gi] || '').toUpperCase().trim();
+        if (!gene || !/^[A-Z][A-Z0-9\-\.]*$/.test(gene)) continue;
+        var res = resolveTag(ti >= 0 ? (cols[ti] || '') : '', src);
+        if (res.tag === null) continue;
+        genes.push({ gene: gene, tag: res.tag });
+      }
+      return { genes: genes };
+    }
+
+    function removeSource(id) { sources = sources.filter(function (s) { return s.id !== id; }); renderChips(); }
+    function updName(id, v) { var s = sources.find(function (x) { return x.id === id; }); if (s) s.name = v; }
+    function updVer(id, v) { var s = sources.find(function (x) { return x.id === id; }); if (s) s.version = v; }
+
+    // ── renderChips — identical chip HTML to working version ──────────
+    function renderChips() {
+      ['ngs', 'panelapp', 'g2p'].forEach(function (type) {
+        var el = document.getElementById('files-' + type);
+        var ts = sources.filter(function (s) { return s.tagMap === type; });
+        if (!ts.length) { el.innerHTML = ''; return; }
+        el.innerHTML = ts.map(function (src) {
+          var cs = src.status === 'ok' ? 'background:#dff0d8;color:#3c763d' : src.status === 'error' ? 'background:#f2dede;color:#a94442' : 'background:#eee;color:#888';
+          var ct = src.status === 'ok' ? src.genes.length + ' gener' : src.status === 'error' ? 'feil' : 'leser…';
+          return '<div class="file-chip ' + (src.status === 'ok' ? 'ok' : src.status === 'error' ? 'error' : '') + '" onclick="event.stopPropagation()">'
+            + '<div class="chip-top"><span class="chip-filename" title="' + (src.file ? src.file.name : '') + '">' + (src.file ? src.file.name : '') + '</span>'
+            + '<span class="chip-count" style="' + cs + '">' + ct + '</span>'
+            + '<button class="chip-rm" onclick="event.stopPropagation();removeSource(\'' + src.id + '\')">×</button></div>'
+            + '<div class="chip-fields" onclick="event.stopPropagation()">'
+            + '<div class="chip-field"><label>Datasettets navn</label><input type="text" value="' + escHtml(src.name) + '" placeholder="f.eks. Pediatriske lidelser" onclick="event.stopPropagation()" oninput="updName(\'' + src.id + '\',this.value)"></div>'
+            + '<div class="chip-field"><label>Versjon</label><input type="text" value="' + escHtml(src.version) + '" placeholder="f.eks. v72.1" onclick="event.stopPropagation()" oninput="updVer(\'' + src.id + '\',this.value)"></div>'
+            + '</div></div>';
+        }).join('');
+      });
+    }
+    function escHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+
+    var MASTER = {
+      'dark-green': { cls: 'cdg', label: 'Alle norske + PanelApp', colorName: 'M\u00f8rk gr\u00f8nn', actionLabel: 'Behold' },
+      'green': { cls: 'cg', label: 'Flere norske + PanelApp', colorName: 'Gr\u00f8nn', actionLabel: 'Vurder (behold)' },
+      'lightred': { cls: 'clr', label: 'Ett norsk + PanelApp', colorName: 'R\u00f8d', actionLabel: 'Vurder (fjern)' },
+      'lightblue': { cls: 'clb', label: 'Kun PanelApp', colorName: 'Bl\u00e5', actionLabel: 'Alias?' },
+      'darkblue': { cls: 'cdb', label: 'Alle norske, ingen PanelApp', colorName: 'M\u00f8rk bl\u00e5', actionLabel: 'Gen med alias?' },
+      'gray': { cls: 'cgr', label: 'Annet', colorName: 'Gr\u00e5', actionLabel: 'Vurder' }
+    };
+
+    function masterKey(row, ngs, pa) {
+      var nT = ngs.length, nP = ngs.filter(function (s) { return row[s.id] != null; }).length, pP = pa.filter(function (s) { return row[s.id] != null; }).length;
+      if (nT > 0 && nP === nT && pP >= 1) return 'dark-green';
+      if (nP > 1 && nP < nT && pP >= 1) return 'green';
+      if (nP === 1 && pP >= 1) return 'lightred';
+      if (nP === 0 && pP >= 1) return 'lightblue';
+      if (nT > 0 && nP === nT && pP === 0) return 'darkblue';
+      return 'gray';
+    }
+
+    function buildTable() {
+      var loaded = sources.filter(function (s) { return s.genes.length > 0; });
+      if (!loaded.length) { setGS('Last opp minst én fil først.', 'err'); return; }
+      var ngs = loaded.filter(function (s) { return s.tagMap === 'ngs'; });
+      var pa = loaded.filter(function (s) { return s.tagMap === 'panelapp'; });
+      var ord = [].concat(
+        loaded.filter(function (s) { return s.tagMap === 'ngs'; }),
+        loaded.filter(function (s) { return s.tagMap === 'panelapp'; }),
+        loaded.filter(function (s) { return s.tagMap === 'g2p'; })
+      );
+      var all = new Set(); loaded.forEach(function (s) { s.genes.forEach(function (g) { all.add(g.gene); }); });
+      var sorted = Array.from(all).sort();
+      var gm = {}; sorted.forEach(function (g) { gm[g] = {}; });
+      loaded.forEach(function (s) { s.genes.forEach(function (g) { gm[g.gene][s.id] = { tag: g.tag }; }); });
+      mergedData = sorted.map(function (gene) {
+        var row = { gene: gene };
+        ord.forEach(function (s) { row[s.id] = gm[gene][s.id] || null; });
+        var mk = masterKey(row, ngs, pa);
+        row._mk = mk; row._ord = ord;
+        return row;
+      });
+      document.getElementById('results').style.display = 'block';
+      setGS(sorted.length + ' unike gener fra ' + loaded.length + ' kilde(r).', 'ok');
+    }
+    function setGS(msg, type) { var el = document.getElementById('gstatus'); el.textContent = msg; el.className = type || ''; }
+
+    // ── xlsx builder (pure JSZip, no ExcelJS) ─────────────────────────
+    function xmlEsc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function colLetter(n) { var s = ''; while (n > 0) { n--; s = String.fromCharCode(65 + (n % 26)) + s; n = Math.floor(n / 26); } return s; }
+
+    var XS = { DEFAULT: 0, HEADER: 1, FJERN: 2, HAMED: 3, BEHOLD: 4, MGREEN: 5, MBLUE: 6, MDARKBLUE: 7, MGRAY: 8, GYELLOW: 9, GEN: 10, EMPTY: 11, LEGHEAD: 12, LEGNORM: 13, SGREEN: 14, SYELLOW: 15, SGRAY: 16, OLINK: 17 };
+    var MK_STYLE = { 'dark-green': 4, 'green': 5, 'lightred': 2, 'lightblue': 6, 'darkblue': 7, 'gray': 8 };
+    var FV_STYLE = { 'Fjern': 2, 'Vurder (behold)': 3, 'Behold': 4, 'Vurder (fjern)': 2 };
+    var TAG_STYLE = { 'green': 14, 'yellow': 15, 'gray': 16 };
+
+    function xlCell(addr, si, val, isStr) {
+      if (val === null || val === undefined || val === '') return '<c r="' + addr + '" s="' + si + '"/>';
+      if (isStr) return '<c r="' + addr + '" s="' + si + '" t="inlineStr"><is><t>' + xmlEsc(val) + '</t></is></c>';
+      return '<c r="' + addr + '" s="' + si + '"><v>' + xmlEsc(String(val)) + '</v></c>';
+    }
+
+    function buildXlsx(ord) {
+      // fonts: 0=normal 1=bold 2=bold-white 3=bold-red 4=bold-yellbrown 5=bold-dkgreen 6=bold-green 7=bold-blue 8=bold-darkblue 9=bold-gray 10=normal-gray(Behold) 11=normal-green 12=normal-yellbrown 13=normal-gray
+      var fnt = function (bold, rgb) { return '<font>' + (bold ? '<b/>' : '') + '<sz val="11"/>' + (rgb ? '<color rgb="' + rgb + '"/>' : '') + '<name val="Arial"/></font>'; };
+      var fontsXml = [fnt(0), fnt(1), fnt(1, 'FFFFFFFF'), fnt(1, 'FF8B0000'), fnt(1, 'FF7D6608'), fnt(1, 'FF1A3D1A'), fnt(1, 'FF276221'), fnt(1, 'FF1F5C8B'), fnt(1, 'FF1F4E79'), fnt(1, 'FF444444'), fnt(0, 'FF999999'), fnt(0, 'FF276221'), fnt(0, 'FF7D6608'), fnt(0, 'FF444444')];
+      // fills: 0=none 1=gray125(req) 2=teal 3=pink 4=yel99 5=grnA8 6=grnC6 7=ltblue(BDD7EE) 8=midblue(9DC3E6) 9=grayD9 10=yelEB
+      var sf = function (rgb) { return '<fill><patternFill patternType="solid"><fgColor rgb="' + rgb + '"/></patternFill></fill>'; };
+      var fillsXml = ['<fill><patternFill patternType="none"/></fill>', '<fill><patternFill patternType="gray125"/></fill>', sf('FF2F4F4F'), sf('FFFFD7D7'), sf('FFFFFF99'), sf('FFA8D5A2'), sf('FFC6EFCE'), sf('FFBDD7EE'), sf('FF9DC3E6'), sf('FFD9D9D9'), sf('FFFFEB9C')];
+      var bdr0 = '<border><left/><right/><top/><bottom/><diagonal/></border>';
+      var bdr1 = '<border><left style="thin"><color rgb="FFCCCCCC"/></left><right style="thin"><color rgb="FFCCCCCC"/></right><top style="thin"><color rgb="FFCCCCCC"/></top><bottom style="thin"><color rgb="FFCCCCCC"/></bottom><diagonal/></border>';
+      var xf = function (fi, li, bi, h, v, w) {
+        var a = 'numFmtId="0" fontId="' + fi + '" fillId="' + li + '" borderId="' + bi + '" xfId="0"';
+        if (fi) a += ' applyFont="1"'; if (li > 1) a += ' applyFill="1"'; if (bi) a += ' applyBorder="1"';
+        var aln = '';
+        if (h || v || w) { a += ' applyAlignment="1"'; aln = '<alignment' + (h ? ' horizontal="' + h + '"' : '') + (v ? ' vertical="' + v + '"' : '') + (w ? ' wrapText="1"' : '') + '/>'; }
+        return '<xf ' + a + '>' + aln + '</xf>';
+      };
+      // cellXfs index = XS.* constant
+      var cellXfs = [
+        xf(0, 0, 0),                     // 0 DEFAULT
+        xf(2, 2, 1, 'center', 'bottom', 1), // 1 HEADER (white-bold, teal, wrap)
+        xf(3, 3, 1, 'center', 'center', 0), // 2 FJERN/lightred (red, pink)
+        xf(4, 4, 1, 'center', 'center', 0), // 3 HAMED (yellbrown, yel99)
+        xf(10, 0, 1, 'center', 'center', 0),// 4 BEHOLD/dark-green (neutral gray, no fill)
+        xf(6, 6, 1, 'center', 'center', 0), // 5 MGREEN/gene-green (green, grnC6)
+        xf(7, 7, 1, 'center', 'center', 0), // 6 MBLUE/Alias (dark text, ltblue BDD7EE)
+        xf(8, 8, 1, 'center', 'center', 0), // 7 MDARKBLUE/Gen med alias (dark text, midblue 9DC3E6)
+        xf(9, 9, 1, 'center', 'center', 0), // 8 MGRAY/gene-gray (gray, grayD9)
+        xf(4, 10, 1, 'center', 'center', 0),// 9 GYELLOW (yellbrown, yelEB)
+        xf(1, 0, 1, 'left', 'center', 0),   // 10 GEN (bold, no fill)
+        xf(0, 0, 1, 'center', 'center', 0), // 11 EMPTY (no fill, border)
+        xf(2, 2, 0, 'left', 'bottom', 0),   // 12 LEGHEAD (white-bold, teal, no border)
+        xf(0, 0, 0, 'left', 'center', 0),   // 13 LEGNORM (default, left)
+        xf(11, 6, 1, 'center', 'center', 0), // 14 SGREEN source cell (non-bold green text, grnC6)
+        xf(12, 10, 1, 'center', 'center', 0),// 15 SYELLOW source cell (non-bold dark yellow text, yelEB)
+        xf(13, 9, 1, 'center', 'center', 0), // 16 SGRAY source cell (non-bold gray text, grayD9)
+        xf(0, 0, 0, 'center', 'center', 0),  // 17 OLINK (OMIM link text centered)
+      ];
+      // dxf 0=Behold(neutral) 1=Vurder (behold)(green) 2=Vurder (fjern)(yellow) 3=Alias?(ltblue) 4=Gen med alias?(midblue) 5=Vurder(gray) 6=Fjern(red)
+      var dxfD = [
+        { bg: 'FFFFFFFF', fg: 'FF999999', bold: false },
+        { bg: 'FFC6EFCE', fg: 'FF276221', bold: true },
+        { bg: 'FFFFEB9C', fg: 'FF7D6608', bold: true },
+        { bg: 'FFBDD7EE', fg: 'FF1F5C8B', bold: true },
+        { bg: 'FF9DC3E6', fg: 'FF1F4E79', bold: true },
+        { bg: 'FFD9D9D9', fg: 'FF444444', bold: true },
+        { bg: 'FFFFD7D7', fg: 'FF8B0000', bold: true }
+      ];
+      var dxfXml = dxfD.map(function (d) { return '<dxf><font>' + (d.bold ? '<b/>' : '') + '<color rgb="' + d.fg + '"/></font><fill><patternFill><bgColor rgb="' + d.bg + '"/></patternFill></fill></dxf>'; }).join('');
+      var stylesXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+        + '<fonts count="' + fontsXml.length + '">' + fontsXml.join('') + '</fonts>'
+        + '<fills count="' + fillsXml.length + '">' + fillsXml.join('') + '</fills>'
+        + '<borders count="2">' + bdr0 + bdr1 + '</borders>'
+        + '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
+        + '<cellXfs count="' + cellXfs.length + '">' + cellXfs.join('') + '</cellXfs>'
+        + '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>'
+        + '<dxfs count="' + dxfD.length + '">' + dxfXml + '</dxfs>'
+        + '</styleSheet>';
+
+      // ── sheet1: Genmaster ─────────────────────────────────────────────
+      var totalCols = ord.length + 3, lastRow = mergedData.length + 1;
+      var hdrLabels = ['Masterstatus', 'Gen', 'Lenker til OMIM'].concat(ord.map(function (s) { return (s.name || s.file.name) + (s.version ? ' (' + s.version + ')' : ''); }));
+      var rowsXml = '<row r="1" ht="40" customHeight="1">';
+      for (var ci = 1; ci <= totalCols; ci++)rowsXml += xlCell(colLetter(ci) + '1', XS.HEADER, hdrLabels[ci - 1], true);
+      rowsXml += '</row>';
+      var hyperlinksXml = '';
+      var hyperlinkRels = '';
+      mergedData.forEach(function (row, i) {
+        var r = i + 2, m = MASTER[row._mk];
+        var hrid = 'rId' + r;
+        rowsXml += '<row r="' + r + '" ht="18" customHeight="1">';
+        rowsXml += xlCell(colLetter(1) + r, MK_STYLE[row._mk] || XS.MGRAY, m.actionLabel, true);
+        rowsXml += xlCell(colLetter(2) + r, XS.GEN, row.gene, true);
+        rowsXml += xlCell(colLetter(3) + r, XS.OLINK, 'OMIM', true);
+        ord.forEach(function (s, si) { var e = row[s.id]; rowsXml += e ? xlCell(colLetter(si + 4) + r, TAG_STYLE[e.tag] || XS.MGRAY, row.gene, true) : xlCell(colLetter(si + 4) + r, XS.EMPTY, null, false); });
+        rowsXml += '</row>';
+        hyperlinksXml += '<hyperlink ref="C' + r + '" r:id="' + hrid + '"/>';
+        hyperlinkRels += '<Relationship Id="' + hrid + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="https://www.omim.org/search?limit=10&amp;search=' + xmlEsc(row.gene) + '" TargetMode="External"/>';
+      });
+      var colsXml = '<cols>'
+        + '<col min="1" max="1" width="16" customWidth="1"/>'
+        + '<col min="2" max="2" width="16" customWidth="1"/>'
+        + '<col min="3" max="3" width="8" customWidth="1"/>'
+        + (ord.length ? '<col min="4" max="' + (3 + ord.length) + '" width="16" customWidth="1"/>' : '')
+        + '</cols>';
+      var cfRules = [
+        { dxfId: 0, label: 'Behold' },
+        { dxfId: 6, label: 'Fjern' },
+        { dxfId: 1, label: 'Vurder (behold)' },
+        { dxfId: 2, label: 'Vurder (fjern)' },
+        { dxfId: 3, label: 'Alias?' },
+        { dxfId: 4, label: 'Gen med alias?' },
+        { dxfId: 5, label: 'Vurder' }
+      ];
+      var cf = '<conditionalFormatting sqref="A2:A' + lastRow + '">';
+      cfRules.forEach(function (cr, i) { cf += '<cfRule type="expression" dxfId="' + cr.dxfId + '" priority="' + (i + 1) + '"><formula>A2="' + xmlEsc(cr.label) + '"</formula></cfRule>'; });
+      cf += '</conditionalFormatting>';
+      var dv = '<dataValidations count="1">'
+        + '<dataValidation type="list" allowBlank="0" showDropDown="0" sqref="A2:A' + lastRow + '">'
+        + '<formula1>&quot;Behold,Vurder (behold),Vurder (fjern),Fjern,Alias?,Gen med alias?,Vurder&quot;</formula1>'
+        + '</dataValidation>'
+        + '</dataValidations>';
+      var sheet1Xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        + '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+        + '<sheetViews><sheetView tabSelected="1" workbookViewId="0">'
+        + '<pane xSplit="3" ySplit="1" topLeftCell="D2" activePane="bottomRight" state="frozen"/>'
+        + '<selection pane="bottomRight"/>'
+        + '</sheetView></sheetViews>'
+        + '<sheetFormatPr defaultRowHeight="15"/>'
+        + colsXml + '<sheetData>' + rowsXml + '</sheetData>'
+        + '<autoFilter ref="A1:B1"/>'
+        + cf + dv
+        + (hyperlinksXml ? '<hyperlinks>' + hyperlinksXml + '</hyperlinks>' : '')
+        + '</worksheet>';
+
+      // ── sheet2: Forklaring ────────────────────────────────────────────
+      var leg = '<row r="1" ht="24" customHeight="1">' + xlCell('A1', XS.LEGHEAD, 'Handling', true) + xlCell('B1', XS.LEGHEAD, 'Status', true) + xlCell('C1', XS.LEGHEAD, 'Forklaring', true) + '</row>';
+      var legendRows = [
+        { action: 'Behold', style: MK_STYLE['dark-green'], status: MASTER['dark-green'].label, info: 'Alle norske paneler OG minst ett PanelApp-panel \u2192 Behold' },
+        { action: 'Vurder (behold)', style: MK_STYLE['green'], status: MASTER['green'].label, info: 'Mer enn ett, ikke alle, norske paneler OG minst ett PanelApp \u2192 Vurder (behold)' },
+        { action: 'Vurder (fjern)', style: XS.GYELLOW, status: MASTER['lightred'].label, info: 'Kun \u00c9TT norsk panel OG minst ett PanelApp-panel \u2192 Vurder (fjern)' },
+        { action: 'Fjern', style: XS.FJERN, status: 'Manuelt valg', info: 'Manuell status satt i dropdown \u2192 Fjern' },
+        { action: 'Alias?', style: MK_STYLE['lightblue'], status: MASTER['lightblue'].label, info: 'Ingen norske paneler, men minst ett PanelApp-panel \u2192 Alias?' },
+        { action: 'Gen med alias?', style: MK_STYLE['darkblue'], status: MASTER['darkblue'].label, info: 'Alle norske paneler, men IKKE noe PanelApp-panel \u2192 Gen med alias?' },
+        { action: 'Vurder', style: MK_STYLE['gray'], status: MASTER['gray'].label, info: 'Passer ikke i noen av kategoriene over \u2192 Vurder' }
+      ];
+      legendRows.forEach(function (p, i) {
+        var r = i + 2;
+        leg += '<row r="' + r + '" ht="20" customHeight="1">'
+          + xlCell('A' + r, p.style, p.action, true)
+          + xlCell('B' + r, XS.LEGNORM, p.status, true)
+          + xlCell('C' + r, XS.LEGNORM, p.info, true)
+          + '</row>';
+      });
+      var sourceHeaderRow = legendRows.length + 3;
+      leg += '<row r="' + (sourceHeaderRow - 1) + '"/><row r="' + sourceHeaderRow + '" ht="18" customHeight="1">' + xlCell('A' + sourceHeaderRow, XS.GEN, 'Datakilder lastet inn', true) + '</row>';
+      ord.forEach(function (s, si) {
+        var r = sourceHeaderRow + 1 + si;
+        var t = s.tagMap === 'ngs' ? 'Genetikkportalen (NGS)' : s.tagMap === 'panelapp' ? 'PanelApp' : 'Gene2Phenotype (G2P)';
+        leg += '<row r="' + r + '" ht="18" customHeight="1">' + xlCell('A' + r, XS.LEGNORM, (s.name || s.file.name) + (s.version ? ' (' + s.version + ')' : ''), true) + xlCell('B' + r, XS.LEGNORM, t, true) + '</row>';
+      });
+      var sheet2Xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        + '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+        + '<sheetViews><sheetView workbookViewId="0"/></sheetViews>'
+        + '<sheetFormatPr defaultRowHeight="15"/>'
+        + '<cols><col min="1" max="1" width="40" customWidth="1"/><col min="2" max="2" width="28" customWidth="1"/><col min="3" max="3" width="60" customWidth="1"/></cols>'
+        + '<sheetData>' + leg + '</sheetData>'
+        + '</worksheet>';
+
+      // ── package ───────────────────────────────────────────────────────
+      var ct = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+        + '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+        + '<Default Extension="xml" ContentType="application/xml"/>'
+        + '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
+        + '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+        + '<Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+        + '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'
+        + '</Types>';
+      var pkgRels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'
+        + '</Relationships>';
+      var wbXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        + '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+        + '<sheets><sheet name="Genmaster" sheetId="1" r:id="rId1"/><sheet name="Forklaring" sheetId="2" r:id="rId2"/></sheets>'
+        + '</workbook>';
+      var wbRels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>'
+        + '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/>'
+        + '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
+        + '</Relationships>';
+      var sheet1Rels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        + hyperlinkRels
+        + '</Relationships>';
+      var zip = new JSZip();
+      zip.file('[Content_Types].xml', ct);
+      zip.file('_rels/.rels', pkgRels);
+      zip.file('xl/workbook.xml', wbXml);
+      zip.file('xl/_rels/workbook.xml.rels', wbRels);
+      zip.file('xl/worksheets/_rels/sheet1.xml.rels', sheet1Rels);
+      zip.file('xl/styles.xml', stylesXml);
+      zip.file('xl/worksheets/sheet1.xml', sheet1Xml);
+      zip.file('xl/worksheets/sheet2.xml', sheet2Xml);
+      return zip.generateAsync({ type: 'arraybuffer', compression: 'DEFLATE' });
+    }
+
+    async function exportExcel() {
+      if (!mergedData.length) { alert('Bygg mastertabellen først.'); return; }
+      if (typeof JSZip === 'undefined') { alert('JSZip ikke lastet — sjekk internettforbindelsen.'); return; }
+      var btn = document.getElementById('btn-export');
+      var statusEl = document.getElementById('export-status');
+      btn.disabled = true; btn.textContent = 'Genererer…'; statusEl.textContent = '';
+      var loaded = sources.filter(function (s) { return s.genes.length > 0; });
+      var ord = [].concat(
+        loaded.filter(function (s) { return s.tagMap === 'ngs'; }),
+        loaded.filter(function (s) { return s.tagMap === 'panelapp'; }),
+        loaded.filter(function (s) { return s.tagMap === 'g2p'; })
+      );
+      try {
+        var buf = await buildXlsx(ord);
+        var blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a'); a.href = url;
+        var today = new Date().toISOString().slice(0, 10);
+        a.download = 'genmaster_' + today + '.xlsx';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        btn.disabled = false; btn.textContent = 'Eksporter til Excel';
+        statusEl.textContent = '✓ Lastet ned genmaster_' + today + '.xlsx';
+        statusEl.style.color = '#3c763d';
+      } catch (err) {
+        btn.disabled = false; btn.textContent = 'Eksporter til Excel';
+        statusEl.textContent = 'Feil: ' + err.message;
+        statusEl.style.color = '#a94442';
+        console.error(err);
+      }
+    }
+
+  </script>
+</body>
+
+</html>
