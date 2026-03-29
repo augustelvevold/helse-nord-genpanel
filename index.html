@@ -36,6 +36,7 @@
 
     .page-header {
       flex-shrink: 0;
+      text-align: center;
     }
 
     h1 {
@@ -490,7 +491,6 @@
 
   <div class="page-header">
     <h1>Genbase-sammenslåer</h1>
-    <p class="sub">Slå sammen genlister fra flere databaser og eksporter en fargekodet masterlist til Excel.</p>
   </div>
 
   <div class="two-col">
@@ -505,7 +505,6 @@
             <div class="dr-main-col">
               <div class="dr-header">
                 <span class="dr-title">Genetikkportalen (NGS)</span>
-                <span class="dr-hint">klikk eller dra filer hit</span>
               </div>
               <div class="dr-meta">
                 <span class="dr-sub"><a href="https://genetikkportalen.no" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">genetikkportalen.no</a></span>
@@ -525,7 +524,6 @@
             <div class="dr-main-col">
               <div class="dr-header">
                 <span class="dr-title">PanelApp</span>
-                <span class="dr-hint">klikk eller dra filer hit</span>
               </div>
               <div class="dr-meta">
                 <span class="dr-sub"><a href="https://panelapp.genomicsengland.co.uk" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">genomicsengland.co.uk</a></span>
@@ -548,7 +546,6 @@
             <div class="dr-main-col">
               <div class="dr-header">
                 <span class="dr-title">Gene2Phenotype (G2P)</span>
-                <span class="dr-hint">klikk eller dra filer hit</span>
               </div>
               <div class="dr-meta">
                 <span class="dr-sub"><a href="https://www.ebi.ac.uk/gene2phenotype" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">ebi.ac.uk/gene2phenotype</a></span>
@@ -565,8 +562,7 @@
 
       <div class="col-actions">
         <div class="btn-row">
-          <button class="build" onclick="buildTable()">Bygg mastertabell</button>
-          <button class="btn-export" id="btn-export" onclick="exportExcel()" disabled>Eksporter til Excel</button>
+          <button class="btn-export" id="btn-export" onclick="exportExcel()">Eksporter til Excel</button>
         </div>
         <div id="gstatus"></div>
         <span class="export-status" id="export-status"></span>
@@ -576,19 +572,13 @@
     <div class="col-right">
       <div class="intro card">
         <div class="card-title">Slik bruker du verktøyet</div>
-        <p>Dette verktøyet hjelper deg å samle genlister fra flere databaser i én felles oversikt. Hvert gen får en
-          masterstatus basert på hvilke databaser det finnes i.</p>
+        <p>Verktøyet slår sammen genlister fra flere kilder til én felles mastertabell med status per gen.</p>
         <ol>
-          <li><strong>Last opp filer</strong> – dra og slipp filer fra databasene nedenfor inn i riktig boks. Du kan laste
-            opp flere filer per kilde.</li>
-          <li><strong>Sett navn og versjon</strong> – gi hvert datasett et gjenkjennelig navn og versjonsnummer (f.eks.
-            «Pediatriske lidelser» og «v72.1»).</li>
-          <li><strong>Bygg mastertabell</strong> – klikk knappen for å slå sammen alle kildene til én tabell, sortert
-            alfabetisk.</li>
-          <li><strong>Eksporter til Excel</strong> – last ned en fargekodet Excel-fil der fargene oppdateres automatisk når
-            du endrer verdier i dropdownene.</li>
+          <li><strong>Last ned data fra kildene</strong> – gå til nettstedene for databasene du vil bruke, og last ned datasettene.</li>
+          <li><strong>Legg filene i riktig boks</strong> – dra filene inn i riktig kildeboks. Du kan laste opp flere filer per kilde.</li>
+          <li><strong>Kontroller navn og versjon</strong> – appen foreslår navn basert på filnavn. Endre gjerne til et kort og tydelig navn som passer i Excel-kolonner, og legg til versjonsnummer hvis ønskelig.</li>
+          <li><strong>Eksporter</strong> – klikk <strong>Eksporter til Excel</strong>. Verktøyet bygger mastertabellen automatisk før eksport.</li>
         </ol>
-        <p style="margin-top:8px;font-size:12px;color:#888;">Støttede filformater: TSV, CSV og TXT.</p>
       </div>
 
       <div class="forklaring card">
@@ -724,7 +714,7 @@
 
     function buildTable() {
       var loaded = sources.filter(function (s) { return s.genes.length > 0; });
-      if (!loaded.length) { setGS('Last opp minst én fil først.', 'err'); return; }
+      if (!loaded.length) { setGS('Last opp minst én fil først.', 'err'); return false; }
       var ngs = loaded.filter(function (s) { return s.tagMap === 'ngs'; });
       var pa = loaded.filter(function (s) { return s.tagMap === 'panelapp'; });
       var ord = [].concat(
@@ -743,8 +733,8 @@
         row._mk = mk; row._ord = ord;
         return row;
       });
-      document.getElementById('btn-export').disabled = false;
       setGS(sorted.length + ' unike gener fra ' + loaded.length + ' kilde(r).', 'ok');
+      return true;
     }
     function setGS(msg, type) { var el = document.getElementById('gstatus'); el.textContent = msg; el.className = type || ''; }
 
@@ -954,7 +944,7 @@
     }
 
     async function exportExcel() {
-      if (!mergedData.length) { alert('Bygg mastertabellen først.'); return; }
+      if (!buildTable()) { alert('Last opp minst én fil først.'); return; }
       if (typeof JSZip === 'undefined') { alert('JSZip ikke lastet — sjekk internettforbindelsen.'); return; }
       var btn = document.getElementById('btn-export');
       var statusEl = document.getElementById('export-status');
